@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
- // optional, or style within Auth.css
 
-const Captcha = ({ onChange }) => {
+const Captcha = ({ onChange, setCaptchaText }) => {
   const [captcha, setCaptcha] = useState("");
 
   const generateCaptcha = () => {
@@ -11,6 +10,7 @@ const Captcha = ({ onChange }) => {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     setCaptcha(result);
+    setCaptchaText(result); // Send the generated CAPTCHA back to parent
     onChange(""); // clear input on new captcha
   };
 
@@ -21,16 +21,21 @@ const Captcha = ({ onChange }) => {
   return (
     <div className="captcha-container">
       <div className="captcha-display">{captcha}</div>
-      <button type="button" onClick={generateCaptcha} className="captcha-refresh">
+      <button 
+        type="button" 
+        onClick={generateCaptcha} 
+        className="captcha-refresh"
+      >
         ↻
       </button>
       <input
         type="text"
         placeholder="Enter CAPTCHA"
         className="auth-input"
+        value={onChange.value}
         onChange={(e) => onChange(e.target.value)}
+        required
       />
-      <input type="hidden" value={captcha} readOnly />
     </div>
   );
 };
